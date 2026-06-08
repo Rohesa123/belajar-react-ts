@@ -16,13 +16,12 @@ export const profile = {
   bio: "Backend Developer di PT Digital Amore Kriyanesia (DAK). Saya fokus membangun REST API dan sistem yang aman menggunakan Java & Spring Boot, dengan minat khusus pada keamanan aplikasi (JWT & 2FA). Di luar itu saya juga membangun aplikasi mobile dan web, serta terus belajar teknologi baru.",
 } as const;
 
-// Perusahaan tempat bekerja saat ini.
+// Perusahaan tempat bekerja saat ini (deskripsi ada di i18n).
 export const company = {
   name: "PT Digital Amore Kriyanesia",
   short: "DAK",
   role: "Backend Developer",
   url: "https://dak.co.id/",
-  desc: "Software house & IT consulting yang membangun perangkat lunak modern untuk bisnis dan institusi.",
 } as const;
 
 // Tautan media sosial. `type` dipakai untuk memilih ikon.
@@ -58,14 +57,6 @@ export const certificates: { title: string; issuer: string; url: string }[] = [
 // form kontak otomatis memakai fallback mailto (buka aplikasi email pengunjung).
 export const WEB3FORMS_ACCESS_KEY = "7bb7e3c8-13c0-4f0d-8182-f70c06e5fd18";
 
-// Badge peran yang muncul di hero.
-export const heroBadges = [
-  "Backend",
-  "Spring Boot",
-  "Security / JWT",
-  "Open Source",
-] as const;
-
 // Nilai cadangan (fallback) — dipakai HANYA kalau belum pernah ada data live
 // tersimpan di cache (mis. kunjungan pertama + langsung kena rate limit).
 export type LanguageStat = { name: string; count: number; pct: number };
@@ -90,69 +81,37 @@ export const staticSnapshot = {
   ] as LanguageStat[],
 };
 
-// Label + urutan kartu statistik (nilainya diisi dari data live / cache).
+// Urutan kartu statistik. `key` = field di snapshot, `labelKey` = teks di i18n.
 export const statFields = [
-  { key: "publicRepos", label: "Repositori" },
-  { key: "followers", label: "Followers" },
-  { key: "following", label: "Following" },
-  { key: "createdYear", label: "Di GitHub sejak" },
+  { key: "publicRepos", labelKey: "repos" },
+  { key: "followers", labelKey: "followers" },
+  { key: "following", labelKey: "following" },
+  { key: "createdYear", labelKey: "since" },
 ] as const;
 
-export type Tech = {
-  name: string;
-  detail: string;
-  level: "Utama" | "Mahir" | "Familiar";
-};
+// Level kanonik (label-nya diterjemahkan di i18n).
+export type TechLevel = "primary" | "proficient" | "familiar";
+export type Tech = { name: string; level: TechLevel };
 
-// Diurutkan dari yang paling dominan di portofolio.
+// Diurutkan dari yang paling dominan di portofolio. Deskripsi tiap item
+// ada di kamus i18n (strings.ts → tech.details), dipetakan lewat `name`.
 export const techStack: Tech[] = [
-  { name: "Java", detail: "Bahasa utama — fondasi dari hampir semua proyek backend", level: "Utama" },
-  { name: "Spring Boot", detail: "REST API, scheduling, dependency injection", level: "Utama" },
-  { name: "Security / JWT", detail: "Autentikasi token, TOTP / 2FA", level: "Mahir" },
-  { name: "Flutter / Dart", detail: "Aplikasi mobile lintas platform", level: "Mahir" },
-  { name: "Laravel / PHP", detail: "Aplikasi web & CRUD", level: "Familiar" },
-  { name: "React / TypeScript", detail: "Frontend modern (repo ini ✨)", level: "Familiar" },
+  { name: "Java", level: "primary" },
+  { name: "Spring Boot", level: "primary" },
+  { name: "Security / JWT", level: "proficient" },
+  { name: "Flutter / Dart", level: "proficient" },
+  { name: "Laravel / PHP", level: "familiar" },
+  { name: "React / TypeScript", level: "familiar" },
 ];
 
+// Teks deskripsi & highlight proyek ada di i18n (strings.ts → projects.items),
+// dipetakan lewat `name`.
 export type Project = {
   name: string;
-  description: string;
   language: string;
-  highlight: string;
   stars?: number;
 };
 
 export const featuredProjects: Project[] = [
-  {
-    name: "totp",
-    description:
-      "Implementasi Time-based One-Time Password (TOTP) di Java — algoritma di balik kode 2FA seperti Google Authenticator. Menghasilkan & memverifikasi kode sekali pakai berbasis waktu.",
-    language: "Java",
-    highlight: "Keamanan / 2FA",
-    stars: 1,
-  },
+  { name: "totp", language: "Java", stars: 1 },
 ];
-
-// "Penilaian" — kesan terhadap profil berdasarkan pola repositori.
-export const assessment = {
-  intro:
-    "Seorang developer backend-focused yang membangun fondasinya di atas ekosistem Java — terstruktur, memperhatikan keamanan, dan terus belajar hal baru.",
-  points: [
-    {
-      title: "Backend yang kokoh",
-      body: "Mayoritas proyek berdiri di atas Java & Spring Boot — dari REST API, penjadwalan, sampai struktur project template yang rapi.",
-    },
-    {
-      title: "Sadar keamanan",
-      body: "Punya ketertarikan nyata pada security: JWT, TOTP/2FA, dan template keamanan. Tidak sekadar bikin fitur, tapi memikirkan cara melindunginya.",
-    },
-    {
-      title: "Polyglot & adaptif",
-      body: "Tidak terkurung di satu bahasa — juga menyentuh Flutter/Dart untuk mobile dan PHP/Laravel untuk web. Mau belajar tools sesuai kebutuhan.",
-    },
-    {
-      title: "Pembelajar konsisten",
-      body: "Banyak repo eksperimen dan 'belajar-*', plus eksplorasi proyek fintech open-source (Apache Fineract, Mifos X). Selalu mencoba ide baru.",
-    },
-  ],
-};

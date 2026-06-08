@@ -1,36 +1,19 @@
 import { statFields } from "../data/profile";
 import { useGithub, formatRelative } from "../github/githubContext";
-
-const statusMeta: Record<
-  string,
-  { dot: string; text: string; label: (rel: string) => string }
-> = {
-  live: {
-    dot: "bg-leaf",
-    text: "text-leaf",
-    label: () => "Data live dari GitHub · diperbarui baru saja",
-  },
-  cached: {
-    dot: "bg-amber-400",
-    text: "text-amber-400",
-    label: (rel) => `Mode hemat (rate limit) · data terakhir ${rel}`,
-  },
-  loading: {
-    dot: "bg-mist animate-pulse",
-    text: "text-mist",
-    label: () => "Mengambil data dari GitHub…",
-  },
-  static: {
-    dot: "bg-mist",
-    text: "text-mist",
-    label: () => "Menampilkan data contoh",
-  },
-};
+import { useLang } from "../i18n/languageContext";
 
 export default function StatsGrid() {
   const { snapshot, status } = useGithub();
-  const meta = statusMeta[status];
+  const { t } = useLang();
   const isLoading = status === "loading";
+
+  const rel = formatRelative(snapshot.fetchedAt, t.rel);
+  const statusMeta = {
+    live: { dot: "bg-leaf", text: "text-leaf", label: t.stats.live },
+    cached: { dot: "bg-amber-400", text: "text-amber-400", label: t.stats.cached(rel) },
+    loading: { dot: "bg-mist animate-pulse", text: "text-mist", label: t.stats.loading },
+    static: { dot: "bg-mist", text: "text-mist", label: t.stats.static },
+  }[status];
 
   return (
     <section className="mx-auto max-w-5xl px-6">
@@ -49,7 +32,7 @@ export default function StatsGrid() {
               {snapshot[f.key]}
             </div>
             <div className="mt-1 text-[11px] uppercase tracking-wider text-mist">
-              {f.label}
+              {t.stats[f.labelKey]}
             </div>
           </div>
         ))}
@@ -57,10 +40,8 @@ export default function StatsGrid() {
 
       {/* indikator sumber data */}
       <div className="mt-4 flex items-center justify-center gap-2 text-xs">
-        <span className={`h-2 w-2 rounded-full ${meta.dot}`} />
-        <span className={meta.text}>
-          {meta.label(formatRelative(snapshot.fetchedAt))}
-        </span>
+        <span className={`h-2 w-2 rounded-full ${statusMeta.dot}`} />
+        <span className={statusMeta.text}>{statusMeta.label}</span>
       </div>
     </section>
   );

@@ -1,4 +1,5 @@
 import { useGithub } from "../github/githubContext";
+import { useLang } from "../i18n/languageContext";
 import SectionTitle from "./SectionTitle";
 
 // Warna khas tiap bahasa (mirip GitHub linguist).
@@ -19,15 +20,16 @@ const colorFor = (name: string) => langColor[name] ?? "#3ecf8e";
 
 export default function Languages() {
   const { snapshot } = useGithub();
+  const { t } = useLang();
   const langs = snapshot.languages;
 
   return (
-    <section className="mx-auto max-w-5xl px-6 py-20">
-      <SectionTitle kicker="Bahasa" title="Distribusi Bahasa di GitHub" />
+    <section id="bahasa" className="mx-auto max-w-5xl scroll-mt-24 px-6 py-20">
+      <SectionTitle kicker={t.languages.kicker} title={t.languages.title} />
 
       <div className="glass rounded-3xl p-6 sm:p-8">
         {/* bar gabungan */}
-        <div className="flex h-3 w-full overflow-hidden rounded-full bg-white/5">
+        <div className="flex h-3 w-full overflow-hidden rounded-full bg-line">
           {langs.map((l) => (
             <div
               key={l.name}
@@ -54,9 +56,7 @@ export default function Languages() {
           ))}
         </div>
 
-        <p className="mt-6 text-xs text-mist">
-          * Dihitung dari bahasa utama tiap repositori publik (data live GitHub).
-        </p>
+        <p className="mt-6 text-xs text-mist">{t.languages.note}</p>
       </div>
     </section>
   );

@@ -1,9 +1,11 @@
-import { profile, heroBadges } from "../data/profile";
+import { profile } from "../data/profile";
 import { useGithub } from "../github/githubContext";
+import { useLang } from "../i18n/languageContext";
 import SocialLinks from "./SocialLinks";
 
 export default function ProfileHeader() {
   const { snapshot } = useGithub();
+  const { t } = useLang();
   const [firstName, ...rest] = snapshot.name.split(" ");
   const lastName = rest.join(" ");
 
@@ -22,7 +24,7 @@ export default function ProfileHeader() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-leaf opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-leaf" />
             </span>
-            Terbuka untuk kolaborasi
+            {t.hero.open}
           </div>
 
           <h1 className="mt-5 font-display text-4xl font-bold leading-tight text-fog sm:text-6xl">
@@ -35,14 +37,14 @@ export default function ProfileHeader() {
           </p>
 
           <p className="mx-auto mt-5 max-w-md text-base leading-relaxed text-mist md:mx-0">
-            {profile.tagline}
+            {t.hero.tagline}
           </p>
 
           <div className="mt-6 flex flex-wrap justify-center gap-2 md:justify-start">
-            {heroBadges.map((b) => (
+            {t.hero.badges.map((b) => (
               <span
                 key={b}
-                className="rounded-lg border border-white/10 bg-elevated/60 px-3 py-1 font-mono text-xs text-fog/80"
+                className="rounded-lg border border-line bg-elevated/60 px-3 py-1 font-mono text-xs text-fog/80"
               >
                 {b}
               </span>
@@ -54,13 +56,13 @@ export default function ProfileHeader() {
               href="#proyek"
               className="rounded-xl bg-gradient-to-r from-lime to-mint px-6 py-3 text-sm font-semibold text-ink shadow-lg shadow-leaf/20 transition hover:scale-105"
             >
-              Lihat Proyek
+              {t.hero.viewProjects}
             </a>
             <a
               href="#kontak"
-              className="rounded-xl border border-white/15 px-6 py-3 text-sm font-semibold text-fog transition hover:border-leaf/50 hover:text-leaf"
+              className="rounded-xl border border-line px-6 py-3 text-sm font-semibold text-fog transition hover:border-leaf/50 hover:text-leaf"
             >
-              Hubungi Saya
+              {t.hero.contactMe}
             </a>
           </div>
 
@@ -77,7 +79,7 @@ export default function ProfileHeader() {
             <div className="animate-pulse-glow absolute inset-2 rounded-full bg-leaf/20 blur-2xl" />
 
             {/* bingkai foto: overflow-hidden supaya overlay ikut melengkung */}
-            <div className="animate-float absolute inset-3 overflow-hidden rounded-full border border-white/10 bg-elevated shadow-2xl">
+            <div className="animate-float absolute inset-3 overflow-hidden rounded-full border border-line bg-elevated shadow-2xl">
               <img
                 src={snapshot.avatar}
                 alt={snapshot.name}
@@ -86,13 +88,13 @@ export default function ProfileHeader() {
               />
               {/* scrim bawah: foto memudar ke warna tema, badge jadi nyatu */}
               <div className="absolute inset-0 rounded-full bg-gradient-to-t from-ink/80 via-ink/10 to-transparent" />
-              {/* vignette tepi: melebur background putih ke gelap */}
-              <div className="absolute inset-0 rounded-full shadow-[inset_0_0_48px_14px_rgba(13,15,19,0.6)]" />
+              {/* vignette tepi: melebur background foto ke warna tema */}
+              <div className="absolute inset-0 rounded-full shadow-[inset_0_0_48px_14px_var(--avatar-vignette)]" />
               {/* highlight halus di atas biar tidak flat */}
               <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/5 to-transparent" />
             </div>
 
-            <span className="absolute -bottom-2 left-1/2 z-10 -translate-x-1/2 rounded-full border border-white/10 bg-elevated px-3 py-1 font-mono text-xs text-leaf shadow-lg">
+            <span className="absolute -bottom-2 left-1/2 z-10 -translate-x-1/2 rounded-full border border-line bg-elevated px-3 py-1 font-mono text-xs text-leaf shadow-lg">
               📍 {snapshot.location ?? profile.location}
             </span>
           </div>

@@ -9,25 +9,31 @@ import Certificates from "./components/Certificates";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import { GithubProvider } from "./github/GithubProvider";
+import { LanguageProvider } from "./i18n/LanguageProvider";
+import { ThemeProvider } from "./theme/ThemeProvider";
 
 function App() {
   return (
-    <GithubProvider>
-      <div className="min-h-screen bg-ink text-fog">
-        <Navbar />
-        <main>
-          <ProfileHeader />
-          <StatsGrid />
-          <AboutMe />
-          <TechStack />
-          <Languages />
-          <FeaturedProjects />
-          <Certificates />
-          <Contact />
-        </main>
-        <Footer />
-      </div>
-    </GithubProvider>
+    <ThemeProvider>
+      <LanguageProvider>
+        <GithubProvider>
+          <div className="min-h-screen bg-ink text-fog">
+            <Navbar />
+            <main>
+              <ProfileHeader />
+              <StatsGrid />
+              <AboutMe />
+              <TechStack />
+              <Languages />
+              <FeaturedProjects />
+              <Certificates />
+              <Contact />
+            </main>
+            <Footer />
+          </div>
+        </GithubProvider>
+      </LanguageProvider>
+    </ThemeProvider>
   );
 }
 

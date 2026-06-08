@@ -1,10 +1,12 @@
 import { certificates } from "../data/profile";
+import { useLang } from "../i18n/languageContext";
 import SectionTitle from "./SectionTitle";
 
 export default function Certificates() {
+  const { t } = useLang();
   return (
     <section id="sertifikat" className="mx-auto max-w-5xl scroll-mt-24 px-6 py-20">
-      <SectionTitle kicker="Sertifikat" title="Belajar di Dicoding" />
+      <SectionTitle kicker={t.certs.kicker} title={t.certs.title} />
 
       <div className="grid gap-4 sm:grid-cols-2">
         {certificates.map((c) => (

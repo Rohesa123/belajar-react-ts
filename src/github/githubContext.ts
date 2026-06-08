@@ -127,15 +127,21 @@ export async function fetchGithubUser(signal?: AbortSignal): Promise<GhSnapshot>
   };
 }
 
-/** Format waktu relatif Bahasa Indonesia, mis. "3 menit lalu". */
-export function formatRelative(ts: number | null): string {
+type RelStrings = {
+  now: string;
+  min: (n: number) => string;
+  hour: (n: number) => string;
+  day: (n: number) => string;
+};
+
+/** Format waktu relatif sesuai bahasa aktif, mis. "3 menit lalu" / "3m ago". */
+export function formatRelative(ts: number | null, rel: RelStrings): string {
   if (!ts) return "—";
   const diff = Date.now() - ts;
   const min = Math.floor(diff / 60000);
-  if (min < 1) return "baru saja";
-  if (min < 60) return `${min} menit lalu`;
-  const jam = Math.floor(min / 60);
-  if (jam < 24) return `${jam} jam lalu`;
-  const hari = Math.floor(jam / 24);
-  return `${hari} hari lalu`;
+  if (min < 1) return rel.now;
+  if (min < 60) return rel.min(min);
+  const hour = Math.floor(min / 60);
+  if (hour < 24) return rel.hour(hour);
+  return rel.day(Math.floor(hour / 24));
 }

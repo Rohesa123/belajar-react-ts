@@ -2,19 +2,21 @@
 
 /* ===========================================================================
    Tema modern — dark netral (charcoal kebiruan) dengan aksen emerald → teal.
-   Latar dibuat lebih netral supaya hijaunya jadi aksen yang "pop", bukan
-   membanjiri seluruh layar. Nuansa Spring-ish tapi lebih kalem & premium.
+   Mendukung mode GELAP (default) & TERANG via class `.light` di <html>.
+   Token warna di-flip lewat CSS variable, jadi utility seperti `bg-ink` /
+   `text-fog` otomatis ikut berubah tanpa menulis ulang ratusan class.
    =========================================================================== */
 @theme {
-  --color-ink: #0d0f13; /* latar utama, netral cool-dark */
+  --color-ink: #0d0f13; /* latar utama */
   --color-surface: #14171c;
   --color-elevated: #1b1f26;
 
-  --color-leaf: #3ecf8e; /* primary — emerald yang adem */
+  --color-leaf: #3ecf8e; /* primary — emerald */
   --color-mint: #2dd4bf; /* sekunder — teal */
   --color-lime: #6ee7b7; /* highlight terang untuk gradient */
-  --color-fog: #e8ebe9; /* near-white text */
-  --color-mist: #98a2a4; /* muted text (netral) */
+  --color-fog: #e8ebe9; /* teks utama */
+  --color-mist: #98a2a4; /* teks redup */
+  --color-line: rgba(255, 255, 255, 0.1); /* border halus */
 
   --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
@@ -24,6 +26,43 @@
   --animate-float: float 7s ease-in-out infinite;
   --animate-pulse-glow: pulse-glow 4s ease-in-out infinite;
   --animate-drift: drift 18s ease-in-out infinite;
+}
+
+/* Variabel non-token (dipakai di .glass, .bg-grid, scrollbar, dll) — DARK */
+:root {
+  --glass-bg: rgba(27, 31, 38, 0.5);
+  --glass-border: rgba(255, 255, 255, 0.07);
+  --glass-border-hover: rgba(62, 207, 142, 0.35);
+  --grid-line: rgba(62, 207, 142, 0.045);
+  --text-grad: linear-gradient(120deg, #6ee7b7, #3ecf8e 45%, #2dd4bf);
+  --scroll-thumb: #2a2f37;
+  --scroll-thumb-hover: #3a414b;
+  --avatar-vignette: rgba(13, 15, 19, 0.6);
+  --selection-bg: rgba(62, 207, 142, 0.25);
+}
+
+/* ====== MODE TERANG — override token & variabel ====== */
+:root.light {
+  --color-ink: #f5f7f4;
+  --color-surface: #ffffff;
+  --color-elevated: #ffffff;
+
+  --color-leaf: #0f9d6b; /* emerald lebih gelap → kontras di latar terang */
+  --color-mint: #0d9488;
+  --color-lime: #34c98a;
+  --color-fog: #16191c; /* teks gelap */
+  --color-mist: #586066;
+  --color-line: rgba(15, 23, 20, 0.12);
+
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(15, 23, 20, 0.1);
+  --glass-border-hover: rgba(15, 157, 107, 0.45);
+  --grid-line: rgba(15, 157, 107, 0.07);
+  --text-grad: linear-gradient(120deg, #0f9d6b, #0d9488);
+  --scroll-thumb: #cfd6cf;
+  --scroll-thumb-hover: #b4bdb4;
+  --avatar-vignette: rgba(245, 247, 244, 0.55);
+  --selection-bg: rgba(15, 157, 107, 0.18);
 }
 
 @keyframes float {
@@ -54,33 +93,35 @@ body {
   background-color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* ---- Utility classes yang dipakai berulang ---- */
 @layer components {
-  /* kartu kaca (glassmorphism) — netral + border halus */
+  /* kartu kaca (glassmorphism) — warna mengikuti tema */
   .glass {
-    background: rgba(27, 31, 38, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     backdrop-filter: blur(12px);
+    transition: background-color 0.3s ease, border-color 0.2s ease;
   }
   .glass:hover {
-    border-color: rgba(62, 207, 142, 0.35);
+    border-color: var(--glass-border-hover);
   }
 
-  /* teks gradient emerald → teal */
+  /* teks gradient (mengikuti tema) */
   .text-gradient {
-    background-image: linear-gradient(120deg, #6ee7b7, #3ecf8e 45%, #2dd4bf);
+    background-image: var(--text-grad);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
-  /* grid halus untuk latar (sangat tipis) */
+  /* grid halus untuk latar */
   .bg-grid {
     background-image:
-      linear-gradient(rgba(62, 207, 142, 0.045) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(62, 207, 142, 0.045) 1px, transparent 1px);
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
     background-size: 48px 48px;
     -webkit-mask-image: radial-gradient(ellipse 75% 55% at 50% 0%, #000 35%, transparent 100%);
     mask-image: radial-gradient(ellipse 75% 55% at 50% 0%, #000 35%, transparent 100%);
@@ -91,11 +132,11 @@ body {
 ::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-track { background: var(--color-ink); }
 ::-webkit-scrollbar-thumb {
-  background: #2a2f37;
+  background: var(--scroll-thumb);
   border-radius: 9999px;
   border: 2px solid var(--color-ink);
 }
-::-webkit-scrollbar-thumb:hover { background: #3a414b; }
+::-webkit-scrollbar-thumb:hover { background: var(--scroll-thumb-hover); }
 
 /* aksen seleksi teks */
-::selection { background: rgba(62, 207, 142, 0.25); color: #fff; }
+::selection { background: var(--selection-bg); color: var(--color-fog); }

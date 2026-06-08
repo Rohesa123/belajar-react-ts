@@ -69,17 +69,30 @@ export default function ProfileHeader() {
           </div>
         </div>
 
-        {/* kanan: avatar dengan cincin berputar */}
+        {/* kanan: avatar dengan cincin berputar + foto yang dilebur ke tema */}
         <div className="flex justify-center">
           <div className="relative h-60 w-60">
-            <div className="animate-spin-slow absolute inset-0 rounded-full bg-[conic-gradient(from_0deg,transparent,#5cc878,#b6f36a,#34d8a0,transparent)] opacity-80 blur-[2px]" />
-            <div className="animate-pulse-glow absolute inset-2 rounded-full bg-leaf/30 blur-2xl" />
-            <img
-              src={snapshot.avatar}
-              alt={snapshot.name}
-              className="animate-float absolute inset-3 h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] rounded-full border border-white/10 object-cover shadow-2xl"
-            />
-            <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 rounded-full border border-white/10 bg-elevated px-3 py-1 font-mono text-xs text-leaf shadow-lg">
+            {/* cincin gradient (lebih lembut, tidak neon) */}
+            <div className="animate-spin-slow absolute inset-0 rounded-full bg-[conic-gradient(from_0deg,transparent,#3ecf8e,#6ee7b7,#2dd4bf,transparent)] opacity-55 blur-[1px]" />
+            <div className="animate-pulse-glow absolute inset-2 rounded-full bg-leaf/20 blur-2xl" />
+
+            {/* bingkai foto: overflow-hidden supaya overlay ikut melengkung */}
+            <div className="animate-float absolute inset-3 overflow-hidden rounded-full border border-white/10 bg-elevated shadow-2xl">
+              <img
+                src={snapshot.avatar}
+                alt={snapshot.name}
+                className="h-full w-full object-cover"
+                style={{ filter: "saturate(0.9) contrast(1.06) brightness(0.96)" }}
+              />
+              {/* scrim bawah: foto memudar ke warna tema, badge jadi nyatu */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-t from-ink/80 via-ink/10 to-transparent" />
+              {/* vignette tepi: melebur background putih ke gelap */}
+              <div className="absolute inset-0 rounded-full shadow-[inset_0_0_48px_14px_rgba(13,15,19,0.6)]" />
+              {/* highlight halus di atas biar tidak flat */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/5 to-transparent" />
+            </div>
+
+            <span className="absolute -bottom-2 left-1/2 z-10 -translate-x-1/2 rounded-full border border-white/10 bg-elevated px-3 py-1 font-mono text-xs text-leaf shadow-lg">
               📍 {snapshot.location ?? profile.location}
             </span>
           </div>

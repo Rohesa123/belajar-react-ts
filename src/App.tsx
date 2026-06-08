@@ -1,35 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Navbar from "./components/Navbar";
+import ProfileHeader from "./components/ProfileHeader";
+import StatsGrid from "./components/StatsGrid";
+import AboutMe from "./components/AboutMe";
+import TechStack from "./components/TechStack";
+import Languages from "./components/Languages";
+import FeaturedProjects from "./components/FeaturedProjects";
+import Certificates from "./components/Certificates";
+import Contact from "./components/Contact";
+import Footer from "./components/Footer";
+import { GithubProvider } from "./github/GithubProvider";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <GithubProvider>
+      <div className="min-h-screen bg-ink text-fog">
+        <Navbar />
+        <main>
+          <ProfileHeader />
+          <StatsGrid />
+          <AboutMe />
+          <TechStack />
+          <Languages />
+          <FeaturedProjects />
+          <Certificates />
+          <Contact />
+        </main>
+        <Footer />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Hallo Bang
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </GithubProvider>
+  );
 }
 
-export default App
+export default App;
